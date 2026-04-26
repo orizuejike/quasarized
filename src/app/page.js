@@ -7,7 +7,6 @@ import {
   User, Lock, LogIn, CheckCircle, Eye, EyeOff, Clock, AlertTriangle,
   Menu, X, Home 
 } from 'lucide-react';
-
 import { clinicalRiskArticles } from '@/data/clinicalRisk';
 import { forensicCaseFiles } from '@/data/forensicCases';
 import { dailyBlogPosts } from '@/data/dailyBlogPosts';
