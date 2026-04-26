@@ -958,7 +958,7 @@ export default function Quasarized() {
                   </div>
                   <div className="flex-1 w-full">
                     <h3 className="font-serif text-3xl md:text-4xl text-white mb-2">{artist.name}</h3>
-                    <p className="text-slate-400 mb-6 font-sans text-sm md:text-base">Exclusive Record Label Signee & Promoted Artist.</p>
+                    <p className="text-slate-400 mb-6 font-sans text-sm md:text-base">Promoted Artist</p>
                     <div className="space-y-3 md:space-y-4">
                       <h4 className="font-sans text-xs md:text-sm tracking-widest text-cyan-400 uppercase">Stream on Platforms</h4>
                       <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center md:justify-start">
