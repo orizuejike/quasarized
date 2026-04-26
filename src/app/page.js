@@ -99,7 +99,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
   const answeredCount = Object.keys(answers).length;
   const unansweredCount = questions.length - answeredCount;
 
-  // --- POST-SUBMISSION VIEW ---
   if (isFinished) {
     const feedback = calculateScoreFeedback(score);
     return (
@@ -144,7 +143,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
     );
   }
 
-  // --- ACTIVE EXAMINATION VIEW ---
   return (
     <div className="bg-slate-950 min-h-screen flex flex-col font-sans animate-fade-in">
       <div className="bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center sticky top-0 z-40 shadow-md">
@@ -161,7 +159,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
       </div>
 
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-        {/* Navigation Grid */}
         <div className="w-full md:w-80 bg-slate-900 border-r border-slate-800 p-6 flex flex-col md:overflow-y-auto">
           <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-6">Question Navigation</h3>
           <div className="grid grid-cols-5 gap-2 mb-8">
@@ -187,7 +184,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
           </div>
         </div>
 
-        {/* Main Question Area */}
         <div className="flex-1 p-6 md:p-10 overflow-y-auto relative">
           <div className="max-w-3xl mx-auto">
             <div className="mb-8">
@@ -220,7 +216,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
         </div>
       </div>
 
-      {/* Anti-Cheat Modal */}
       {showCheatModal && (
         <div className="fixed inset-0 bg-red-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-6">
           <div className="bg-slate-900 border-2 border-red-600 p-8 md:p-10 rounded-xl max-w-lg text-center shadow-2xl">
@@ -239,7 +234,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
         </div>
       )}
 
-      {/* Confirm Submit Modal */}
       {showSubmitModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
           <div className="bg-slate-900 border border-slate-700 p-8 md:p-10 rounded-xl max-w-lg text-center shadow-2xl">
@@ -282,6 +276,38 @@ const DrugCard = ({ name, classType, interaction, severity, clinicalNote }) => (
   </div>
 );
 
+// NEW: Smarter Video Section that parses YouTube links cleanly
+const VideoSection = ({ title, url, description }) => {
+  let videoId = "";
+  if (url && url.includes("youtu.be/")) {
+    videoId = url.split("youtu.be/")[1]?.split("?")[0];
+  } else if (url && url.includes("youtube.com/watch?v=")) {
+    videoId = url.split("v=")[1]?.split("&")[0];
+  }
+  
+  const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+  
+  return (
+    <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl hover:border-cyan-800 transition-colors">
+      <h3 className="font-serif text-2xl text-white mb-3">{title}</h3>
+      <p className="font-sans text-slate-400 mb-6 text-sm leading-relaxed">{description}</p>
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-slate-700 bg-slate-950 flex items-center justify-center">
+        {embedUrl ? (
+          <iframe 
+            src={embedUrl} title={title} className="absolute top-0 left-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen
+          ></iframe>
+        ) : (
+          <div className="text-slate-600 flex flex-col items-center gap-2">
+            <PlayCircle size={40} className="opacity-50" />
+            <p className="text-sm">Video link not yet provided</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const FullArticleDisplay = ({ article }) => (
   <article className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden mb-12 shadow-lg shadow-cyan-900/10">
     <div className="w-full h-72 md:h-[32rem] relative overflow-hidden bg-slate-950 flex justify-center items-center">
@@ -316,7 +342,6 @@ export default function Quasarized() {
   const [activeArticle, setActiveArticle] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Authentication & User Profile States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null); 
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -327,7 +352,6 @@ export default function Quasarized() {
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
 
-  // CBT Routing State
   const [activeCBTSubject, setActiveCBTSubject] = useState(null);
 
   useEffect(() => {
@@ -499,10 +523,23 @@ export default function Quasarized() {
                   Forensic and DNA Insights from Israel Mordechai bridging clinical pharmacy and death investigation.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <button onClick={() => navigateTo('cases')} className="bg-cyan-600 hover:bg-cyan-500 text-white px-8 py-4 rounded font-medium transition-all flex items-center justify-center gap-2">
+                  {/* NEW: Scroll to Multimedia button */}
+                  <button onClick={() => {
+                    const multimediaSection = document.getElementById('youtube-multimedia');
+                    if (multimediaSection) {
+                      multimediaSection.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      navigateTo('cases');
+                    }
+                  }} className="bg-cyan-600 hover:bg-cyan-500 text-white px-8 py-4 rounded font-medium transition-all flex items-center justify-center gap-2">
                     <PlayCircle size={20} /> Watch the Case Studies
                   </button>
-                  <button onClick={() => navigateTo('services')} className="border border-slate-600 hover:border-cyan-400 hover:text-cyan-400 text-slate-300 px-8 py-4 rounded font-medium transition-all">
+
+                  {/* NEW: Direct WhatsApp Booking Link */}
+                  <button onClick={() => {
+                    const message = "Hello Israel, I would like to book a professional consultation.";
+                    window.open(`https://wa.me/2347061515950?text=${encodeURIComponent(message)}`, '_blank');
+                  }} className="border border-slate-600 hover:border-cyan-400 hover:text-cyan-400 text-slate-300 px-8 py-4 rounded font-medium transition-all">
                     Book a Consultation
                   </button>
                 </div>
@@ -603,6 +640,30 @@ export default function Quasarized() {
                       severity="Moderate" clinicalNote="Elevated serum levels significantly increase the risk of statin-induced myopathy and rhabdomyolysis."
                     />
                   </div>
+                </div>
+              </div>
+            </section>
+
+            {/* NEW: Restored YouTube Multimedia Section */}
+            <section id="youtube-multimedia" className="py-20 bg-slate-950 border-t border-slate-800">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="mb-12">
+                  <h2 className="font-sans text-cyan-400 tracking-widest uppercase text-sm mb-4 font-bold">Multimedia</h2>
+                  <h1 className="font-serif text-4xl text-white mb-4">YouTube Case Studies.</h1>
+                  <p className="text-slate-400 max-w-2xl">Watch detailed video breakdowns of forensic cases, DNA analyses, and pharmacological interactions.</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* EDIT THE URLs HERE TO YOUR ACTUAL YOUTUBE VIDEOS */}
+                  <VideoSection 
+                    title="The Bleeding Truth: Warfarin & Garlic" 
+                    url="YOUR_YOUTUBE_LINK_HERE" 
+                    description="A clinical breakdown of why natural supplements can be fatal when mixed with anticoagulants." 
+                  />
+                  <VideoSection 
+                    title="Forensics: The Village People vs. Vials" 
+                    url="YOUR_YOUTUBE_LINK_HERE" 
+                    description="Investigating Organophosphate Poisoning and uncovering the chemical truth behind superstitions." 
+                  />
                 </div>
               </div>
             </section>
