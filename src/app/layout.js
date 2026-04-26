@@ -4,37 +4,22 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Quasarized | The Forensic Pharmacist",
-  description: "Forensic and DNA Insights from Israel Mordechai. Bridging clinical pharmacy, death investigation, and standardized CBT education.",
+  title: "Quasarized | The Forensic Pharmacist & Educator",
+  description: "Explore the intersection of Clinical Pharmacy and Forensics with Israel Mordechai. Access standardized Biology CBT exams, forensic case studies, and exclusive music production updates.",
   verification: {
-    // I corrected this line to ONLY include the code from your screenshot
-    google: "zbGv6itWOPhPWXuP2aAJM9aHyJn3_TcJlVqmJVDY2kM", 
+    google: "zbGv6itW0PhPWXuP2AAJM9aHyJn3_TcJ1vqmJVDY2km", 
   },
   openGraph: {
-    title: "Quasarized | The Forensic Pharmacist",
-    description: "Forensic and DNA Insights from Israel Mordechai.",
+    title: "Quasarized | Forensic Insights & Education Portal",
+    description: "Decoding the silent killers in your medicine cabinet. Access the Educator's Lab for WAEC/JAMB Biology CBT practice and professional consultations.",
     url: "https://quasarized.vercel.app", 
     siteName: "Quasarized",
-    images: [
-      {
-        url: "https://quasarized.vercel.app/logo.png",
-        width: 1200,
-        height: 630,
-        alt: "Quasarized Platform Logo",
-      }
-    ],
+    images: [{ url: "https://quasarized.vercel.app/logo.png", width: 1200, height: 630 }],
     locale: "en_NG",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Quasarized | The Forensic Pharmacist",
-    description: "Forensic and DNA Insights from Israel Mordechai.",
-    images: ["https://quasarized.vercel.app/logo.png"],
-  },
 };
 
-// I also ensured the 'L' in Layout is capitalized here
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
