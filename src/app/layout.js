@@ -3,31 +3,30 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// --- THE WHATSAPP & SOCIAL MEDIA PREVIEW ENGINE ---
 export const metadata = {
   title: "Quasarized | The Forensic Pharmacist",
   description: "Forensic and DNA Insights from Israel Mordechai. Bridging clinical pharmacy, death investigation, and standardized CBT education.",
   openGraph: {
     title: "Quasarized | The Forensic Pharmacist",
-    description: "Forensic and DNA Insights from Israel Mordechai. Bridging clinical pharmacy, death investigation, and standardized CBT education.",
-    url: "https://quasarized-platform.vercel.app", // This is your general Vercel domain
+    description: "Forensic and DNA Insights from Israel Mordechai.",
+    url: "https://quasarized.vercel.app", 
     siteName: "Quasarized",
     images: [
       {
-        url: "/israel-profile.jpg", // This tells WhatsApp to use your profile picture as the thumbnail
+        url: "https://quasarized.vercel.app/israel-profile.jpg", // Absolute URL for WhatsApp strict rules
         width: 1200,
         height: 630,
         alt: "Quasarized Platform Preview",
       },
     ],
-    locale: "en_NG", // Optimized for Nigerian traffic
+    locale: "en_NG",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Quasarized | The Forensic Pharmacist",
     description: "Forensic and DNA Insights from Israel Mordechai.",
-    images: ["/israel-profile.jpg"],
+    images: ["https://quasarized.vercel.app/israel-profile.jpg"],
   },
 };
 

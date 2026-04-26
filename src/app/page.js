@@ -5,7 +5,7 @@ import {
   Mail, MessageCircle, PlayCircle, ShieldAlert, ChevronRight,
   Stethoscope, Fingerprint, HeartPulse, FileText, ArrowLeft,
   User, Lock, LogIn, CheckCircle, Eye, EyeOff, Clock, AlertTriangle,
-  Menu, X // NEW: Mobile menu icons
+  Menu, X, Home // NEW: Imported Home icon for the bottom nav
 } from 'lucide-react';
 
 // --- DATA IMPORTS ---
@@ -30,7 +30,7 @@ import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 const CBTEngine = ({ studentName, questions, subject, onExit }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(1200); // 20 minutes
+  const [timeLeft, setTimeLeft] = useState(1200); 
   const [isFinished, setIsFinished] = useState(false);
   const [score, setScore] = useState(0);
   
@@ -100,7 +100,7 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
   if (isFinished) {
     const feedback = calculateScoreFeedback(score);
     return (
-      <div className="bg-slate-950 min-h-screen p-4 md:p-6 font-sans animate-fade-in">
+      <div className="bg-slate-950 min-h-screen p-4 md:p-6 font-sans animate-fade-in pb-24 md:pb-6">
         <div className="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-xl p-6 md:p-8 shadow-2xl">
           <div className="text-center mb-10 border-b border-slate-800 pb-8">
             <h1 className="font-serif text-3xl md:text-5xl text-white mb-2">Examination Complete</h1>
@@ -142,7 +142,7 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
   }
 
   return (
-    <div className="bg-slate-950 min-h-screen flex flex-col font-sans animate-fade-in">
+    <div className="bg-slate-950 min-h-screen flex flex-col font-sans animate-fade-in pb-20 md:pb-0">
       <div className="bg-slate-900 border-b border-slate-800 p-3 md:p-4 flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 shadow-md gap-4 md:gap-0">
         <div className="text-center md:text-left">
           <h2 className="font-serif text-xl md:text-2xl text-white">Quasarized CBT</h2>
@@ -157,7 +157,6 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
       </div>
 
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-        {/* Navigation Grid - Scrolls horizontally on mobile, vertically on desktop */}
         <div className="w-full md:w-80 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 p-4 md:p-6 flex flex-col overflow-x-auto md:overflow-y-auto shrink-0">
           <h3 className="hidden md:block text-sm font-bold tracking-widest text-slate-500 uppercase mb-6">Question Navigation</h3>
           <div className="flex md:grid md:grid-cols-5 gap-2 mb-2 md:mb-8 pb-2 md:pb-0 min-w-max md:min-w-0">
@@ -343,7 +342,6 @@ export default function Quasarized() {
   const [activeArticle, setActiveArticle] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // NEW: Mobile Menu State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -357,6 +355,28 @@ export default function Quasarized() {
   const [authSuccess, setAuthSuccess] = useState('');
 
   const [activeCBTSubject, setActiveCBTSubject] = useState(null);
+
+  // NEW: Back Button Listener (History API)
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.tab) {
+        setActiveTab(event.state.tab);
+        setActiveArticle(event.state.article || null);
+        setActiveCBTSubject(null);
+        setIsMobileMenuOpen(false);
+      } else {
+        setActiveTab('home');
+        setActiveArticle(null);
+        setActiveCBTSubject(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    // Push the initial 'home' state so the very first back-click is caught
+    window.history.replaceState({ tab: 'home', article: null }, '', window.location.pathname);
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -452,12 +472,16 @@ export default function Quasarized() {
     setActiveCBTSubject(null);
   };
 
+  // NEW: Updated Navigation engine to support the Back Button
   const navigateTo = (tab, article = null) => {
     setActiveTab(tab);
     setActiveArticle(article);
     setActiveCBTSubject(null); 
-    setIsMobileMenuOpen(false); // Close mobile menu on navigation
+    setIsMobileMenuOpen(false); 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Save to browser history
+    window.history.pushState({ tab, article }, '', `?view=${tab}`);
   };
 
   const handleWhatsAppRedirect = (courseTitle) => {
@@ -475,7 +499,6 @@ export default function Quasarized() {
   };
 
   const renderContent = () => {
-    
     if (activeCBTSubject === "Biology") {
       return (
         <CBTEngine 
@@ -492,7 +515,6 @@ export default function Quasarized() {
         const relatedPosts = dailyBlogPosts.filter(p => p.id !== activeArticle.id).slice(0, 2);
         return (
           <main className="py-10 md:py-16 max-w-4xl mx-auto px-4 md:px-6 animate-fade-in">
-            {/* Restored "Go Back" button for Blog */}
             <button onClick={() => navigateTo('blog')} className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-6 md:mb-8 font-medium transition-colors">
               <ArrowLeft size={20} /> Back to News & Updates
             </button>
@@ -507,7 +529,6 @@ export default function Quasarized() {
       }
       return (
         <main className="py-10 md:py-16 max-w-4xl mx-auto px-4 md:px-6 animate-fade-in">
-          {/* Restored "Go Back" button for Case Studies */}
           <button onClick={() => navigateTo('cases')} className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-6 md:mb-8 font-medium transition-colors">
             <ArrowLeft size={20} /> Back to Cases Hub
           </button>
@@ -961,12 +982,18 @@ export default function Quasarized() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-cyan-900 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-cyan-900 selection:text-white overflow-x-hidden md:pb-0 pb-20">
       {activeCBTSubject !== "Biology" && (
         <header className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
             <div className="flex items-center space-x-3 cursor-pointer z-50" onClick={() => navigateTo('home')}>
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-cyan-500 to-blue-700 rounded-sm flex items-center justify-center font-serif font-bold text-white text-lg md:text-xl">Q</div>
+              {/* NEW: Logo Image replaced the letter Q. It defaults to your profile pic if logo.png is missing */}
+              <img 
+                src="/logo.png" 
+                alt="Quasarized Logo" 
+                className="w-8 h-8 md:w-10 md:h-10 rounded object-cover border border-slate-700 shadow-lg" 
+                onError={(e) => { e.target.onerror = null; e.target.src = "/israel-profile.jpg"; }} 
+              />
               <span className="font-serif text-xl md:text-2xl font-bold tracking-wide text-white">Quasarized</span>
             </div>
             
@@ -979,36 +1006,25 @@ export default function Quasarized() {
               <button onClick={() => navigateTo('educators-lab')} className={`hover:text-cyan-400 transition-colors ${activeTab === 'educators-lab' ? 'text-cyan-400' : 'text-slate-300'}`}>Educator's Lab</button>
             </nav>
 
-            {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden z-50 text-slate-300 hover:text-white p-2"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+            {/* Empty div to balance header on mobile since bottom nav handles menu now */}
+            <div className="md:hidden w-8 h-8"></div>
           </div>
-
-          {/* Mobile Navigation Overlay */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden absolute top-16 left-0 w-full bg-slate-900 border-b border-slate-800 shadow-2xl animate-fade-in flex flex-col p-4 space-y-4">
-              <button onClick={() => navigateTo('home')} className={`text-left text-lg font-medium p-3 rounded ${activeTab === 'home' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>Home</button>
-              <button onClick={() => navigateTo('services')} className={`text-left text-lg font-medium p-3 rounded ${activeTab === 'services' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>Professional Services</button>
-              <button onClick={() => navigateTo('blog')} className={`text-left text-lg font-medium p-3 rounded ${activeTab === 'blog' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>News & Updates</button>
-              <button onClick={() => navigateTo('artists')} className={`text-left text-lg font-medium p-3 rounded ${activeTab === 'artists' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>Label & Production</button>
-              <button onClick={() => navigateTo('educators-lab')} className={`text-left text-lg font-medium p-3 rounded border border-cyan-900/50 ${activeTab === 'educators-lab' ? 'bg-cyan-900/50 text-white' : 'text-cyan-400 bg-slate-950'}`}>Educator's Lab</button>
-            </div>
-          )}
         </header>
       )}
 
-      <div className={`transition-all duration-300 ${isMobileMenuOpen ? 'opacity-30 blur-sm pointer-events-none' : ''}`}>
+      <div className={`transition-all duration-300`}>
         {renderContent()}
 
         {activeCBTSubject !== "Biology" && (
           <footer className="bg-slate-950 border-t border-slate-900 pt-12 md:pt-16 pb-8 px-4 md:px-6 mt-12">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
               <div className="flex flex-col items-center md:items-start gap-3 md:gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-cyan-500 to-blue-700 flex items-center justify-center rounded font-serif font-bold text-white text-xl md:text-2xl shadow-lg shadow-cyan-900/20">Q</div>
+                <img 
+                  src="/logo.png" 
+                  alt="Quasarized Logo" 
+                  className="w-10 h-10 md:w-12 md:h-12 rounded object-cover border border-slate-700 shadow-lg shadow-cyan-900/20" 
+                  onError={(e) => { e.target.onerror = null; e.target.src = "/israel-profile.jpg"; }} 
+                />
                 <div>
                   <h3 className="font-serif text-xl md:text-2xl text-white">Quasarized</h3>
                   <p className="font-sans text-slate-400 mt-1 text-sm">Israel Mordechai Ejike Orizu</p>
@@ -1025,6 +1041,47 @@ export default function Quasarized() {
           </footer>
         )}
       </div>
+
+      {/* NEW: MOBILE BOTTOM NAVIGATION BAR */}
+      {activeCBTSubject !== "Biology" && (
+        <nav className="md:hidden fixed bottom-0 left-0 w-full bg-slate-950/95 backdrop-blur-md border-t border-slate-800 z-50 flex justify-around items-center pt-2 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+          <button onClick={() => navigateTo('home')} className={`p-2 flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-cyan-400' : 'text-slate-500'}`}>
+            <Home size={22} />
+            <span className="text-[10px] font-medium tracking-wide">Home</span>
+          </button>
+          <button onClick={() => navigateTo('educators-lab')} className={`p-2 flex flex-col items-center gap-1 ${activeTab === 'educators-lab' ? 'text-cyan-400' : 'text-slate-500'}`}>
+            <BookOpen size={22} />
+            <span className="text-[10px] font-medium tracking-wide">Lab</span>
+          </button>
+          <button onClick={() => navigateTo('cases')} className={`p-2 flex flex-col items-center gap-1 ${activeTab === 'cases' ? 'text-cyan-400' : 'text-slate-500'}`}>
+            <Activity size={22} />
+            <span className="text-[10px] font-medium tracking-wide">Cases</span>
+          </button>
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`p-2 flex flex-col items-center gap-1 ${isMobileMenuOpen ? 'text-cyan-400' : 'text-slate-500'}`}>
+            <Menu size={22} />
+            <span className="text-[10px] font-medium tracking-wide">Menu</span>
+          </button>
+        </nav>
+      )}
+
+      {/* NEW: Mobile Slide-Up Menu for the remaining items */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed bottom-16 left-0 w-full bg-slate-900 border-t border-slate-800 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] animate-fade-in flex flex-col z-40 rounded-t-2xl px-4 py-6 space-y-3">
+          <div className="flex justify-between items-center mb-2 px-2 border-b border-slate-800 pb-4">
+            <span className="text-slate-400 font-sans uppercase tracking-widest text-xs font-bold">More Options</span>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-400 hover:text-white"><X size={20} /></button>
+          </div>
+          <button onClick={() => navigateTo('services')} className={`text-left text-base font-medium p-3 rounded-lg flex items-center justify-between ${activeTab === 'services' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>
+            <div className="flex items-center gap-3"><Stethoscope size={18}/> Professional Services</div><ChevronRight size={16} className="opacity-50"/>
+          </button>
+          <button onClick={() => navigateTo('blog')} className={`text-left text-base font-medium p-3 rounded-lg flex items-center justify-between ${activeTab === 'blog' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>
+             <div className="flex items-center gap-3"><FileText size={18}/> News & Updates</div><ChevronRight size={16} className="opacity-50"/>
+          </button>
+          <button onClick={() => navigateTo('artists')} className={`text-left text-base font-medium p-3 rounded-lg flex items-center justify-between ${activeTab === 'artists' ? 'bg-cyan-900/30 text-cyan-400' : 'text-slate-300 hover:bg-slate-800'}`}>
+             <div className="flex items-center gap-3"><Music size={18}/> Label & Production</div><ChevronRight size={16} className="opacity-50"/>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
