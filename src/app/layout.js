@@ -8,7 +8,7 @@ export const metadata = {
   description: "Forensic and DNA Insights from Israel Mordechai. Bridging clinical pharmacy, death investigation, and standardized CBT education.",
   verification: {
     // I corrected this line to ONLY include the code from your screenshot
-    google: "zbGv6itW0PhPWXuP2AAJM9aHyJn3_TcJ1vqmJVDY2km", 
+    google: "zbGv6itWOPhPWXuP2aAJM9aHyJn3_TcJlVqmJVDY2kM", 
   },
   openGraph: {
     title: "Quasarized | The Forensic Pharmacist",
