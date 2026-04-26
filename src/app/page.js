@@ -5,10 +5,9 @@ import {
   Mail, MessageCircle, PlayCircle, ShieldAlert, ChevronRight,
   Stethoscope, Fingerprint, HeartPulse, FileText, ArrowLeft,
   User, Lock, LogIn, CheckCircle, Eye, EyeOff, Clock, AlertTriangle,
-  Menu, X, Home // NEW: Imported Home icon for the bottom nav
+  Menu, X, Home 
 } from 'lucide-react';
 
-// --- DATA IMPORTS ---
 import { clinicalRiskArticles } from '@/data/clinicalRisk';
 import { forensicCaseFiles } from '@/data/forensicCases';
 import { dailyBlogPosts } from '@/data/dailyBlogPosts';
@@ -16,7 +15,6 @@ import { artists } from '@/data/artist';
 import { courses, cbtSubjects } from '@/data/education';
 import { biologyQuestions } from '@/data/cbtBiology';
 
-// --- FIREBASE IMPORTS ---
 import { auth, db } from '@/firebase';
 import { 
   createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, 
@@ -217,7 +215,7 @@ const CBTEngine = ({ studentName, questions, subject, onExit }) => {
       {showCheatModal && (
         <div className="fixed inset-0 bg-red-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6">
           <div className="bg-slate-900 border-2 border-red-600 p-6 md:p-10 rounded-xl max-w-lg text-center shadow-2xl">
-            <AlertTriangle className="text-red-500 mx-auto mb-4 md:mb-6" size={48} className="md:w-16 md:h-16" />
+            <AlertTriangle className="text-red-500 mx-auto mb-4 md:mb-6 md:w-16 md:h-16" size={48} />
             <h2 className="font-serif text-2xl md:text-3xl text-white mb-4">SECURITY WARNING</h2>
             <p className="text-slate-300 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
               You navigated away from the examination window. This has been logged as a potential cheating attempt. 
@@ -296,7 +294,7 @@ const VideoSection = ({ title, url, description }) => {
           ></iframe>
         ) : (
           <div className="text-slate-600 flex flex-col items-center gap-2 p-4 text-center">
-            <PlayCircle size={32} className="md:w-10 md:h-10 opacity-50" />
+            <PlayCircle className="w-8 h-8 md:w-10 md:h-10 opacity-50" />
             <p className="text-xs md:text-sm">Video link not yet provided</p>
           </div>
         )}
@@ -356,7 +354,6 @@ export default function Quasarized() {
 
   const [activeCBTSubject, setActiveCBTSubject] = useState(null);
 
-  // NEW: Back Button Listener (History API)
   useEffect(() => {
     const handlePopState = (event) => {
       if (event.state && event.state.tab) {
@@ -372,7 +369,6 @@ export default function Quasarized() {
     };
 
     window.addEventListener('popstate', handlePopState);
-    // Push the initial 'home' state so the very first back-click is caught
     window.history.replaceState({ tab: 'home', article: null }, '', window.location.pathname);
 
     return () => window.removeEventListener('popstate', handlePopState);
@@ -472,7 +468,6 @@ export default function Quasarized() {
     setActiveCBTSubject(null);
   };
 
-  // NEW: Updated Navigation engine to support the Back Button
   const navigateTo = (tab, article = null) => {
     setActiveTab(tab);
     setActiveArticle(article);
@@ -480,7 +475,6 @@ export default function Quasarized() {
     setIsMobileMenuOpen(false); 
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Save to browser history
     window.history.pushState({ tab, article }, '', `?view=${tab}`);
   };
 
@@ -604,21 +598,21 @@ export default function Quasarized() {
 
             <section className="py-12 md:py-20 px-4 md:px-6 max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
               <div onClick={() => navigateTo('cases')} className="cursor-pointer p-6 md:p-8 border border-slate-800 bg-slate-900/30 rounded-xl hover:bg-slate-900 transition-colors">
-                <Activity className="text-cyan-400 mb-4 md:mb-6" size={32} className="md:w-10 md:h-10" />
+                <Activity className="text-cyan-400 mb-4 md:mb-6 w-8 h-8 md:w-10 md:h-10" />
                 <h3 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">Clinical Risk</h3>
                 <p className="text-slate-400 leading-relaxed text-sm md:text-base">
                   Comprehensive analysis of Herb-Drug interactions. Understanding how natural remedies alter pharmacological efficacy and safety profiles.
                 </p>
               </div>
               <div onClick={() => navigateTo('cases')} className="cursor-pointer p-6 md:p-8 border border-slate-800 bg-slate-900/30 rounded-xl hover:bg-slate-900 transition-colors">
-                <Microscope className="text-cyan-400 mb-4 md:mb-6" size={32} className="md:w-10 md:h-10" />
+                <Microscope className="text-cyan-400 mb-4 md:mb-6 w-8 h-8 md:w-10 md:h-10" />
                 <h3 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">Forensic Case Files</h3>
                 <p className="text-slate-400 leading-relaxed text-sm md:text-base">
                   Detailed toxicology breakdowns. Investigating the chemical catalysts behind high-profile medical and forensic anomalies.
                 </p>
               </div>
               <div onClick={() => navigateTo('educators-lab')} className="cursor-pointer p-6 md:p-8 border border-slate-800 bg-slate-900/30 rounded-xl hover:bg-slate-900 transition-colors sm:col-span-2 md:col-span-1">
-                <BookOpen className="text-cyan-400 mb-4 md:mb-6" size={32} className="md:w-10 md:h-10" />
+                <BookOpen className="text-cyan-400 mb-4 md:mb-6 w-8 h-8 md:w-10 md:h-10" />
                 <h3 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">Educator’s Lab</h3>
                 <p className="text-slate-400 leading-relaxed text-sm md:text-base">
                   Curated medical and student resources. Online registration, private tutoring, and standardized Computer Based Testing (CBT).
@@ -695,7 +689,7 @@ export default function Quasarized() {
           return (
             <main className="py-12 md:py-24 max-w-lg mx-auto px-4 md:px-6 animate-fade-in flex flex-col items-center">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-cyan-900/30 rounded-full flex items-center justify-center mb-4 md:mb-6 border border-cyan-800">
-                <Lock className="text-cyan-400" size={24} className="md:w-8 md:h-8" />
+                <Lock className="text-cyan-400 md:w-8 md:h-8" size={24} />
               </div>
               <h1 className="font-serif text-3xl md:text-4xl text-white mb-2 text-center">{isLoginMode ? "Student Portal" : "Student Registration"}</h1>
               <p className="text-slate-400 text-center mb-8 md:mb-10 text-sm md:text-base px-2">Access the Educator's Lab, register for classes, and participate in standardized CBT assessments.</p>
@@ -717,7 +711,7 @@ export default function Quasarized() {
                     <div className="mb-4 md:mb-6">
                       <label className="block text-xs md:text-sm font-sans tracking-widest text-slate-400 uppercase mb-2">Full Name</label>
                       <div className="relative">
-                        <User className="absolute left-3.5 md:left-4 top-3 md:top-3.5 text-slate-500" size={16} className="md:w-[18px] md:h-[18px]" />
+                        <User className="absolute left-3.5 md:left-4 top-3 md:top-3.5 text-slate-500 md:w-[18px] md:h-[18px]" size={16} />
                         <input type="text" placeholder="Israel Orizu" value={fullName} onChange={(e) => setFullName(e.target.value)} required={!isLoginMode} className="w-full bg-slate-950 border border-slate-700 text-white px-4 py-2.5 md:py-3 pl-10 md:pl-12 rounded focus:outline-none focus:border-cyan-500 text-sm md:text-base" />
                       </div>
                     </div>
@@ -725,21 +719,21 @@ export default function Quasarized() {
                   <div className="mb-4 md:mb-6">
                     <label className="block text-xs md:text-sm font-sans tracking-widest text-slate-400 uppercase mb-2">Email Address</label>
                     <div className="relative">
-                      <Mail className="absolute left-3.5 md:left-4 top-3 md:top-3.5 text-slate-500" size={16} className="md:w-[18px] md:h-[18px]" />
+                      <Mail className="absolute left-3.5 md:left-4 top-3 md:top-3.5 text-slate-500 md:w-[18px] md:h-[18px]" size={16} />
                       <input type="email" placeholder="student@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full bg-slate-950 border border-slate-700 text-white px-4 py-2.5 md:py-3 pl-10 md:pl-12 rounded focus:outline-none focus:border-cyan-500 text-sm md:text-base" />
                     </div>
                   </div>
                   <div className="mb-6 md:mb-8">
                     <label className="block text-xs md:text-sm font-sans tracking-widest text-slate-400 uppercase mb-2">Password (Min 6 Chars)</label>
                     <div className="relative">
-                      <Lock className="absolute left-3.5 md:left-4 top-3 md:top-3.5 text-slate-500" size={16} className="md:w-[18px] md:h-[18px]" />
+                      <Lock className="absolute left-3.5 md:left-4 top-3 md:top-3.5 text-slate-500 md:w-[18px] md:h-[18px]" size={16} />
                       <input type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="w-full bg-slate-950 border border-slate-700 text-white px-4 py-2.5 md:py-3 pl-10 md:pl-12 pr-10 md:pr-12 rounded focus:outline-none focus:border-cyan-500 text-sm md:text-base" />
                       <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 md:right-4 top-3 md:top-3.5 text-slate-500 hover:text-cyan-400 transition-colors">
-                        {showPassword ? <EyeOff size={16} className="md:w-[18px] md:h-[18px]" /> : <Eye size={16} className="md:w-[18px] md:h-[18px]" />}
+                        {showPassword ? <EyeOff className="md:w-[18px] md:h-[18px]" size={16} /> : <Eye className="md:w-[18px] md:h-[18px]" size={16} />}
                       </button>
                     </div>
                   </div>
-                  <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2.5 md:py-3 rounded flex justify-center items-center gap-2 mb-4 text-sm md:text-base"><LogIn size={16} className="md:w-[18px] md:h-[18px]" /> {isLoginMode ? "Secure Login" : "Create Account"}</button>
+                  <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2.5 md:py-3 rounded flex justify-center items-center gap-2 mb-4 text-sm md:text-base"><LogIn className="md:w-[18px] md:h-[18px]" size={16} /> {isLoginMode ? "Secure Login" : "Create Account"}</button>
                 </form>
 
                 <div className="flex items-center gap-3 md:gap-4 my-4 md:my-6">
@@ -781,7 +775,7 @@ export default function Quasarized() {
 
             <div className="mb-12 md:mb-20">
               <h3 className="font-serif text-2xl md:text-3xl text-white mb-6 md:mb-8 border-b border-slate-800 pb-3 md:pb-4 flex items-center gap-2 md:gap-3">
-                <BookOpen className="text-cyan-400" size={24} className="md:w-7 md:h-7" /> Academic & Skill Courses
+                <BookOpen className="text-cyan-400 md:w-7 md:h-7" size={24} /> Academic & Skill Courses
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {courses.map(course => (
@@ -790,7 +784,7 @@ export default function Quasarized() {
                     <h4 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">{course.title}</h4>
                     <p className="text-slate-400 text-xs md:text-sm mb-6 md:mb-8 flex-grow">Registration handled directly by Quasar Management to ensure personalized placement.</p>
                     <button onClick={() => handleWhatsAppRedirect(course.title)} className="w-full bg-slate-950 border border-slate-700 hover:border-cyan-500 hover:text-cyan-400 text-slate-300 py-2.5 md:py-3 rounded font-medium flex justify-center items-center gap-2 transition-all text-sm md:text-base">
-                      <MessageCircle size={16} className="md:w-[18px] md:h-[18px]" /> Register
+                      <MessageCircle className="md:w-[18px] md:h-[18px]" size={16} /> Register
                     </button>
                   </div>
                 ))}
@@ -799,7 +793,7 @@ export default function Quasarized() {
 
             <div>
               <h3 className="font-serif text-2xl md:text-3xl text-white mb-6 md:mb-8 border-b border-slate-800 pb-3 md:pb-4 flex items-center gap-2 md:gap-3">
-                <Activity className="text-cyan-400" size={24} className="md:w-7 md:h-7" /> CBT Examination
+                <Activity className="text-cyan-400 md:w-7 md:h-7" size={24} /> CBT Examination
               </h3>
               <p className="text-slate-400 mb-6 md:mb-8 max-w-3xl text-sm md:text-base">
                 Standardized mock examinations. Select Biology to test the engine. Other subjects are currently locked.
@@ -812,7 +806,7 @@ export default function Quasarized() {
                     className={`border p-3 md:p-4 rounded-lg text-center transition-all font-medium text-xs md:text-sm flex flex-col items-center justify-center gap-2 md:gap-3 h-24 md:h-28
                       ${subject === "Biology" ? 'bg-slate-900 border-cyan-700 hover:bg-slate-800 hover:border-cyan-400 text-white cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.1)]' : 'bg-slate-900/50 border-slate-800 text-slate-500 cursor-not-allowed'}`}
                   >
-                    {subject === "Biology" ? <FileText className="text-cyan-400" size={20} className="md:w-6 md:h-6" /> : <Lock className="text-slate-600" size={20} className="md:w-6 md:h-6" />}
+                    {subject === "Biology" ? <FileText className="text-cyan-400 md:w-6 md:h-6" size={20} /> : <Lock className="text-slate-600 md:w-6 md:h-6" size={20} />}
                     {subject}
                   </button>
                 ))}
@@ -839,7 +833,7 @@ export default function Quasarized() {
 
             <div className="mb-16 md:mb-20">
               <h2 className="font-serif text-2xl md:text-3xl text-cyan-400 mb-6 md:mb-8 border-b border-slate-800 pb-3 md:pb-4 flex items-center gap-2 md:gap-3">
-                <Activity size={24} className="md:w-7 md:h-7" /> Clinical Risk Database
+                <Activity className="md:w-7 md:h-7" size={24} /> Clinical Risk Database
               </h2>
               <div className="space-y-4">
                 {featClinical.map(article => <FullArticleDisplay key={article.id} article={article} />)}
@@ -859,7 +853,7 @@ export default function Quasarized() {
 
             <div>
               <h2 className="font-serif text-2xl md:text-3xl text-cyan-400 mb-6 md:mb-8 border-b border-slate-800 pb-3 md:pb-4 flex items-center gap-2 md:gap-3">
-                <Microscope size={24} className="md:w-7 md:h-7" /> Forensic Case Files
+                <Microscope className="md:w-7 md:h-7" size={24} /> Forensic Case Files
               </h2>
               <div className="space-y-4">
                 {featForensic.map(article => <FullArticleDisplay key={article.id} article={article} />)}
@@ -891,19 +885,19 @@ export default function Quasarized() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               <div className="bg-slate-900 border border-slate-700 p-6 md:p-8 rounded-xl flex flex-col items-center text-center md:items-start md:text-left">
-                <Fingerprint className="text-cyan-400 mb-4 md:mb-6" size={40} className="md:w-12 md:h-12" />
+                <Fingerprint className="text-cyan-400 mb-4 md:mb-6 md:w-12 md:h-12" size={40} />
                 <h3 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">Pharmacogenomic & DNA Profiling</h3>
                 <p className="text-slate-400 mb-6 text-sm md:text-base">Expert analysis on how specific genetic markers influence drug metabolism. This service assists clinicians in avoiding adverse drug reactions and optimizing therapeutic outcomes based on individual DNA profiles.</p>
                 <button className="mt-auto text-cyan-400 font-medium flex items-center gap-2 hover:text-cyan-300 transition-colors text-sm md:text-base">Request Consultation <ChevronRight size={16} /></button>
               </div>
               <div className="bg-slate-900 border border-slate-700 p-6 md:p-8 rounded-xl flex flex-col items-center text-center md:items-start md:text-left">
-                <Stethoscope className="text-cyan-400 mb-4 md:mb-6" size={40} className="md:w-12 md:h-12" />
+                <Stethoscope className="text-cyan-400 mb-4 md:mb-6 md:w-12 md:h-12" size={40} />
                 <h3 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">Forensic Toxicology Audits</h3>
                 <p className="text-slate-400 mb-6 text-sm md:text-base">Detailed review and interpretation of toxicological reports for legal and clinical investigations. Identifying the presence of chemical catalysts and silent killers in complex morbidity cases.</p>
                 <button className="mt-auto text-cyan-400 font-medium flex items-center gap-2 hover:text-cyan-300 transition-colors text-sm md:text-base">Review Case Files <ChevronRight size={16} /></button>
               </div>
               <div className="bg-slate-900 border border-slate-700 p-6 md:p-8 rounded-xl flex flex-col items-center text-center md:items-start md:text-left sm:col-span-2 lg:col-span-1">
-                <HeartPulse className="text-cyan-400 mb-4 md:mb-6" size={40} className="md:w-12 md:h-12" />
+                <HeartPulse className="text-cyan-400 mb-4 md:mb-6 md:w-12 md:h-12" size={40} />
                 <h3 className="font-serif text-xl md:text-2xl text-white mb-3 md:mb-4">BLS & Medical Response Training</h3>
                 <p className="text-slate-400 mb-6 text-sm md:text-base">Certified instruction in Basic Life Support and Automated External Defibrillator utilization. Combining over ten years of educational experience with practical emergency medical protocols.</p>
                 <button className="mt-auto text-cyan-400 font-medium flex items-center gap-2 hover:text-cyan-300 transition-colors text-sm md:text-base">Schedule Training <ChevronRight size={16} /></button>
@@ -953,12 +947,12 @@ export default function Quasarized() {
             <div className="space-y-10 md:space-y-16">
               {artists.map((artist, idx) => (
                 <div key={idx} className="flex flex-col md:flex-row gap-6 md:gap-8 items-center bg-slate-900 border border-slate-800 p-5 md:p-6 rounded-xl hover:border-cyan-800 transition-all text-center md:text-left">
-                  <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-1/3 md:aspect-square rounded-full md:rounded-lg overflow-hidden border-4 md:border border-slate-700 bg-slate-800 shrink-0 shadow-xl">
-                    <img src={artist.image} alt={artist.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                  <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-slate-700 bg-slate-800 shrink-0 shadow-xl mx-auto md:mx-0">
+                    <img src={artist.image} alt={artist.name} className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500" />
                   </div>
                   <div className="flex-1 w-full">
                     <h3 className="font-serif text-3xl md:text-4xl text-white mb-2">{artist.name}</h3>
-                    <p className="text-slate-400 mb-6 font-sans text-sm md:text-base">Promoted Artist</p>
+                    <p className="text-slate-400 mb-6 font-sans text-sm md:text-base">Exclusive Record Label Signee & Promoted Artist.</p>
                     <div className="space-y-3 md:space-y-4">
                       <h4 className="font-sans text-xs md:text-sm tracking-widest text-cyan-400 uppercase">Stream on Platforms</h4>
                       <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center md:justify-start">
@@ -987,7 +981,6 @@ export default function Quasarized() {
         <header className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
             <div className="flex items-center space-x-3 cursor-pointer z-50" onClick={() => navigateTo('home')}>
-              {/* NEW: Logo Image replaced the letter Q. It defaults to your profile pic if logo.png is missing */}
               <img 
                 src="/logo.png" 
                 alt="Quasarized Logo" 
@@ -997,7 +990,6 @@ export default function Quasarized() {
               <span className="font-serif text-xl md:text-2xl font-bold tracking-wide text-white">Quasarized</span>
             </div>
             
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
               <button onClick={() => navigateTo('home')} className={`hover:text-cyan-400 transition-colors ${activeTab === 'home' ? 'text-cyan-400' : 'text-slate-300'}`}>Home</button>
               <button onClick={() => navigateTo('services')} className={`hover:text-cyan-400 transition-colors ${activeTab === 'services' ? 'text-cyan-400' : 'text-slate-300'}`}>Professional Services</button>
@@ -1006,7 +998,6 @@ export default function Quasarized() {
               <button onClick={() => navigateTo('educators-lab')} className={`hover:text-cyan-400 transition-colors ${activeTab === 'educators-lab' ? 'text-cyan-400' : 'text-slate-300'}`}>Educator's Lab</button>
             </nav>
 
-            {/* Empty div to balance header on mobile since bottom nav handles menu now */}
             <div className="md:hidden w-8 h-8"></div>
           </div>
         </header>
@@ -1042,7 +1033,6 @@ export default function Quasarized() {
         )}
       </div>
 
-      {/* NEW: MOBILE BOTTOM NAVIGATION BAR */}
       {activeCBTSubject !== "Biology" && (
         <nav className="md:hidden fixed bottom-0 left-0 w-full bg-slate-950/95 backdrop-blur-md border-t border-slate-800 z-50 flex justify-around items-center pt-2 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
           <button onClick={() => navigateTo('home')} className={`p-2 flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-cyan-400' : 'text-slate-500'}`}>
@@ -1064,7 +1054,6 @@ export default function Quasarized() {
         </nav>
       )}
 
-      {/* NEW: Mobile Slide-Up Menu for the remaining items */}
       {isMobileMenuOpen && (
         <div className="md:hidden fixed bottom-16 left-0 w-full bg-slate-900 border-t border-slate-800 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] animate-fade-in flex flex-col z-40 rounded-t-2xl px-4 py-6 space-y-3">
           <div className="flex justify-between items-center mb-2 px-2 border-b border-slate-800 pb-4">
