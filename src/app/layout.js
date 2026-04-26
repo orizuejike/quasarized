@@ -13,11 +13,11 @@ export const metadata = {
     siteName: "Quasarized",
     images: [
       {
-        url: "https://quasarized.vercel.app/israel-profile.jpg", // Absolute URL for WhatsApp strict rules
+        url: "https://quasarized.vercel.app/israel-profile.jpg",
         width: 1200,
         height: 630,
         alt: "Quasarized Platform Preview",
-      },
+      }
     ],
     locale: "en_NG",
     type: "website",
